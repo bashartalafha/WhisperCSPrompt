@@ -268,10 +268,10 @@ class TextDecoder(nn.Module):
         # [end of Bashar edit ---------------------------]
 
         # Un comment the below for the original code
-        x = (
-            self.token_embedding(x)
-            + self.positional_embedding[offset : offset + x.shape[-1]]
-        )
+        # x = (
+        #     self.token_embedding(x)
+        #     + self.positional_embedding[offset : offset + x.shape[-1]]
+        # )
 
         x = x.to(xa.dtype)
 
