@@ -235,35 +235,37 @@ class TextDecoder(nn.Module):
         
         offset = next(iter(kv_cache.values())).shape[1] if kv_cache else 0
 
-        ### # [start of Bashar edit ---------------------------]
+        # [start of Bashar edit ---------------------------]
         
-        ### ar_tok = 50272
-        ### en_tok = 50259
+        ar_tok = 50272
+        en_tok = 50259
+        ru_token = 50263
 
-        ### # Initialize an empty list to store the embeddings for each token
-        ### token_embeddings = []
+        # Initialize an empty list to store the embeddings for each token
+        token_embeddings = []
 
-        ### # Loop over each token index in x
-        ### for token_id in x[0]:  # Assuming x has a batch size of 1
-        ###     if token_id == ar_tok:
-        ###         # import pdb; pdb.set_trace()
-        ###         ar_emb = self.token_embedding(token_id.unsqueeze(0))
-        ###         en_tok_id = torch.tensor(en_tok, device=token_id.device, dtype=token_id.dtype)
-        ###         en_emb = self.token_embedding(en_tok_id.unsqueeze(0))
-        ###         emb = (ar_emb + en_emb) / 2
-        ###     else:
-        ###         emb = self.token_embedding(token_id.unsqueeze(0))
+        # Loop over each token index in x
+        for token_id in x[0]:  # Assuming x has a batch size of 1
+            if token_id == ru_token:
+                # import pdb; pdb.set_trace()
+                ar_tok_id = torch.tensor(ar_tok, device=token_id.device, dtype=token_id.dtype)
+                ar_emb = self.token_embedding(ar_tok_id.unsqueeze(0))
+                en_tok_id = torch.tensor(en_tok, device=token_id.device, dtype=token_id.dtype)
+                en_emb = self.token_embedding(en_tok_id.unsqueeze(0))
+                emb = (ar_emb + en_emb) / 2
+            else:
+                emb = self.token_embedding(token_id.unsqueeze(0))
 
-        ###     token_embeddings.append(emb)
+            token_embeddings.append(emb)
 
-        ### # Stack the embeddings back together
-        ### x_embedded = torch.cat(token_embeddings, dim=0)
+        # Stack the embeddings back together
+        x_embedded = torch.cat(token_embeddings, dim=0)
 
-        ### # Add the positional embeddings
-        ### x = x_embedded + self.positional_embedding[offset:offset + x.shape[-1]]
-        ### x = x.unsqueeze(0)
+        # Add the positional embeddings
+        x = x_embedded + self.positional_embedding[offset:offset + x.shape[-1]]
+        x = x.unsqueeze(0)
 
-        ### # [end of Bashar edit ---------------------------]
+        # [end of Bashar edit ---------------------------]
 
         # Un comment the below for the original code
         x = (

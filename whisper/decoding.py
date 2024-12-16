@@ -618,6 +618,7 @@ class DecodingTask:
 
         ar_tok = [50272]
         en_tok = [50259]
+        ru_token = [50263]
 
         inject = "شو في plans بدي اروح عال gym"
 
@@ -642,6 +643,8 @@ class DecodingTask:
             langs = []
             toks = self.tokenizer.encode(inject)
             en_ar = [self.sot_sequence[0]]+toks+[self.sot_sequence[-1]]
+        elif mode == "ar_cs":
+            en_ar = list([self.sot_sequence[0]]+ru_token+[self.sot_sequence[-1]])
         
         tokens = en_ar
       
